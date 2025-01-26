@@ -1,50 +1,71 @@
-import { useState } from 'react';
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] =  useState('');
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [error, setError] = useState("");
 
   const handleFirstName = (e) => {
-    let value = e.target.value;
-    console.log("First name",value);
-    setFirstName(value);
-  }
+    setFirstName(e.target.value);
+    setError(""); // Clear error on input change
+  };
 
   const handleLastName = (e) => {
-    let value = e.target.value;
-    console.log("LastName",value);
-    setLastName(value);
-  }
+    setLastName(e.target.value);
+    setError(""); // Clear error on input change
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submit button clicked");
-    setFullName(firstName + ' ' + lastName);
-  }
+
+    // Validation
+    if (!firstName.trim() || !lastName.trim()) {
+      setError("Both First Name and Last Name are required.");
+      return;
+    }
+
+    setFullName(`${firstName.trim()} ${lastName.trim()}`);
+    setError(""); // Clear error if successful
+  };
 
   return (
-   
-      <div>
-        <h1>Full name Display </h1>
-        <form onSubmit={handleSubmit}>
-          <label>First Name : </label>
-          <input type="text" name="firstName"  id='firstName' value={firstName} onChange={handleFirstName}  required/>
-          <br />
-          <br />
-          <label>Last Name : </label>
-          <input type="text" name="lastName" id='lastName' value={lastName} onChange={handleLastName} required/>
-          <br />
-          <br />
-          <button type="submit">Submit</button>
-        </form>
+    <div>
+      <h1>Full Name Display</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="firstName">First Name:</label>
+        <input
+          type="text"
+          id="firstName"
+          value={firstName}
+          onChange={handleFirstName}
+          required
+        />
+        <br />
+        <br />
+        <label htmlFor="lastName">Last Name:</label>
+        <input
+          type="text"
+          id="lastName"
+          value={lastName}
+          onChange={handleLastName}
+          required
+        />
+        <br />
+        <br />
+        <button type="submit">Submit</button>
+      </form>
 
-        <h2>Full Name :  {fullName}</h2>
-      </div>
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-  )
+      {fullName && (
+        <h2>
+          Full Name: <span>{fullName}</span>
+        </h2>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
